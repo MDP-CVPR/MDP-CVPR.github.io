@@ -1,0 +1,6 @@
+@article{sun2025mdp,
+  title={MDP: Multidimensional Vision Model Pruning with Latency Constraint},
+  author={Sun, Xinglong and Lakshmanan, Barath and Shen, Maying and Lan, Shiyi and Chen, Jingde and Alvarez, Jose M},
+  journal={arXiv preprint arXiv:2504.02168},
+  year={2025}
+}

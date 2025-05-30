@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>MDP: Multidimensional Vision Model Pruning with Latency Constraint</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <!-- <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto'> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+      html,body,h1,h2,h3,h4,h5,h6 {font-family: "Titillium Web", "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;}
+      <!-- .cite { background:#f0f0f0; padding:10px; font-size:18px} -->
+      .cite { padding:0px; background:#ffffff; font-size:18px}
+      .card {border: 1px solid #ccc}
+      img { margin-bottom:-6px;}
+      h1 { font-size:52px; font-weight:lighter}
+      p { font-size:18px;}
+      a {text-decoration: none; color: #2196F3;}
+      .layered-paper-big { /* modified from: http://css-tricks.com/snippets/css/layered-paper/ */
+      box-shadow:
+      0px 0px 1px 1px rgba(0,0,0,0.35), /* The top layer shadow */
+      5px 5px 0 0px #fff, /* The second layer */
+      5px 5px 1px 1px rgba(0,0,0,0.35), /* The second layer shadow */
+      10px 10px 0 0px #fff, /* The third layer */
+      10px 10px 1px 1px rgba(0,0,0,0.35), /* The third layer shadow */
+      15px 15px 0 0px #fff, /* The fourth layer */
+      15px 15px 1px 1px rgba(0,0,0,0.35), /* The fourth layer shadow */
+      20px 20px 0 0px #fff, /* The fifth layer */
+      20px 20px 1px 1px rgba(0,0,0,0.35), /* The fifth layer shadow */
+      25px 25px 0 0px #fff, /* The fifth layer */
+      25px 25px 1px 1px rgba(0,0,0,0.35); /* The fifth layer shadow */
+      margin-left: 10px;
+      margin-right: 60px;
+      }
+      .videoWrapper {
+      position: relative;
+      padding-bottom: 56.25%;
+      /* 16:9 */
+      padding-top: 25px;
+      height: 0;
+      }
+      .videoWrapper iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      }
+      
+    </style>
+  </head>  
+  <body class="w3-white">
+    <!-- Page Container -->
+    <div class="w3-content w3-margin-top w3-margin-bottom" style="max-width:960px;">
+
+
+      <!-- The Grid -->
+      <div class="w3-row-padding">
+
+	<!-- paper container -->	  
+	<div class="w3-display-container w3-row w3-white w3-margin-bottom">
+	  <div class="w3-center">
+	    <h1>MDP: Multidimensional Vision Model Pruning with Latency Constraint</h1>
+		<!-- Xinglong Sun · Barath Lakshmanan · Maying Shen · Shiyi Lan · Jingde Chen · Jose M. Alvarez -->
+	    <h5> <a href="https://xinglongsun.com/">Xinglong Sun</a> &emsp;&emsp; <a>Barath Lakshmanan</a> &emsp;&emsp;  <a>Maying Shen</a> &emsp;&emsp; <a>Shiyi Lan</a> &emsp;&emsp; <a>Jingde Chen</a> &emsp;&emsp; <a>Jose M. Alvarez</a></h5>
+	    <h5><em>CVPR 2025</em></h5>
+	  </div>
+	  <div class="w3-center">
+	    <h3>[<a>Code</a>] &emsp; [<a href="https://arxiv.org/abs/2504.02168">Paper</a>]</h3>
+	    <!-- <h3>[<a href="https://github.com/aharley/simple_bev">Code</a>] &emsp; [<a href="simple_bev_sep30.pdf">Paper</a>] &emsp; [<a href="https://arxiv.org/abs/2206.07959">arXiv</a>]</h3> -->
+	    <!-- <h3>[<a href="https://github.com/aharley/simple_bev">Code</a>]</h3> -->
+	  </div>
+	  <hr>
+
+	  
+	  <div class="w3-display-container w3-row w3-white w3-margin-bottom w3-center">
+	    <!-- <h4>5 minute overview</h4> -->
+	    <div class="videoWrapper">
+	      <iframe width="560" height="349" src="https://www.youtube.com/embed/fJsTEBrTjVc" frameborder="0" allowfullscreen></iframe>
+	    </div>
+	  </div>
+	  <hr>
+	  
+	  <div class="w3-center">
+	    <h2>Abstract</h2>
+	  </div>
+	  <p>Current structural pruning methods face two significant limitations: (i) they often limit pruning to finer-grained levels like channels, making aggressive parameter reduction challenging, and (ii) they focus heavily on parameter and FLOP reduction, with existing latency-aware methods frequently relying on simplistic, suboptimal linear models that fail to generalize well to transformers, where multiple interacting dimensions impact latency. In this paper, we address both limitations by introducing Multi-Dimensional Pruning (MDP), a novel paradigm that jointly optimizes across a variety of pruning granularities-including channels, query, key, heads, embeddings, and blocks. MDP employs an advanced latency modeling technique to accurately capture latency variations across all prunable dimensions, achieving an optimal balance between latency and accuracy. By reformulating pruning as a Mixed-Integer Nonlinear Program (MINLP), MDP efficiently identifies the optimal pruned structure across all prunable dimensions while respecting latency constraints. This versatile framework supports both CNNs and transformers. Extensive experiments demonstrate that MDP significantly outperforms previous methods, especially at high pruning ratios. On ImageNet, MDP achieves a 28% speed increase with a +1.4 Top-1 accuracy improvement over prior work like HALP for ResNet50 pruning. Against the latest transformer pruning method, Isomorphic, MDP delivers an additional 37% acceleration with a +0.7 Top-1 accuracy improvement.</p>
+	  <hr>
+	  <div class="w3-center">
+	    <h2>Method Overview</h2>
+	  </div>
+	  <div class="w3-card w3-padding">
+		<img src="images/framework.png" style="width:100%">
+	  </div>
+	  <div class="w3-container w3-padding-16">
+	    <div class="w3-row">
+	      <div class="w3-col m4 w3-padding">
+	        <div class="w3-card w3-padding" style="height:100%">
+	          <h4 class="w3-center">1. Dimension Encoding</h4>
+	          <p class="w3-center">We encode prunable dimensions with one-hot variables 𝝎 and block decisions with binary variable 𝜿, with 𝝎's active bit index indicating parameter count along that dimension.</p>
+	        </div>
+	      </div>
+	      <div class="w3-col m4 w3-padding">
+	        <div class="w3-card w3-padding" style="height:100%">
+	          <h4 class="w3-center">2. Performance & Latency Modeling</h4>
+	          <p class="w3-center">An importance function over 𝝎 and 𝜿 captures how different configurations affect model performance. A latency function maps configurations to inference latency using a precomputed hardware-specific lookup table.</p>
+	        </div>
+	      </div>
+	      <div class="w3-col m4 w3-padding">
+	        <div class="w3-card w3-padding" style="height:100%">
+	          <h4 class="w3-center">3. Optimization</h4>
+	          <p class="w3-center">We reformulate the above into a Mixed-Integer Nonlinear Program (MINLP) to maximize the importance function while constraining the latency function under the latency budget.</p>
+	        </div>
+	      </div>
+	    </div>
+	  </div>
+
+
+	  <hr>
+	  <div class="w3-center">
+	    <h2>Results</h2>
+	  </div>
+	  <div class="w3-card w3-padding">
+		<img src="images/result.png" style="width:100%">
+	  </div>
+	  <div class="w3-container w3-padding-16">
+	    <div class="w3-row">
+	      <div class="w3-col m4 w3-padding">
+	        <div class="w3-card w3-padding" style="height:100%">
+	          <h4 class="w3-center">ResNet50 on ImageNet</h4>
+	          <p class="w3-center">
+	            <span class="w3-large w3-text-blue">+28%</span> speed increase<br>
+	            <span class="w3-large w3-text-green">+1.4</span> Top-1 accuracy improvement<br>
+	            vs. prior art <a href="https://arxiv.org/abs/2210.06659">HALP</a>.
+	          </p>
+	        </div>
+	      </div>
+	      <div class="w3-col m4 w3-padding">
+	        <div class="w3-card w3-padding" style="height:100%">
+	          <h4 class="w3-center">DEIT-Base on ImageNet</h4>
+	          <p class="w3-center">
+	            <span class="w3-large w3-text-blue">+37%</span> additional acceleration<br>
+	            <span class="w3-large w3-text-green">+0.7</span> Top-1 accuracy gain<br>
+	            vs. <a href="https://arxiv.org/abs/2407.04616">Isomorphic Pruning</a>.
+	          </p>
+	        </div>
+	      </div>
+	      <div class="w3-col m4 w3-padding">
+	        <div class="w3-card w3-padding" style="height:100%">
+	          <h4 class="w3-center">3D Object Detection</h4>
+	          <p class="w3-center">
+	            <span class="w3-large w3-text-blue">×1.18</span> speedup<br>
+	            <span class="w3-large w3-text-green">0.451</span> vs. 0.449 mAP<br>
+	            vs. dense baseline
+	          </p>
+	        </div>
+	      </div>
+	    </div>
+	  </div>
+	  <p class="w3-center w3-text-grey w3-padding-16">
+	    MDP exhibits Pareto dominance with both CNNs and Transformers in tasks ranging from ImageNet classification to NuScenes 3D detection. 
+	    All speedups are shown relative to the dense model.
+	  </p>
+
+	  
+	  <br />
+
+	  <hr>
+
+	  <div class="w3-row w3-margin" style="padding-bottom:2em">
+	    <div class="w3-center"><h2>Paper</h2></div>
+	    <div class="w3-col s0 m1 l2" style="height:10px"></div>
+	    <div class="w3-col s6 m3 l2">
+	      <a href="https://arxiv.org/abs/2401.00850"><img class="layered-paper-big" src="images/page1.png" style="width:100%;min-height:200px; margin-right:3em"></a>
+	    </div>
+	    <div class="w3-col s6 m7 l6" style="padding-left:5em">
+	      <div class="cite">
+			Xinglong Sun, Barath Lakshmanan, Maying Shen, Shiyi Lan, Jingde Chen, Jose M. Alvarez.
+	  	<i>MDP: Multidimensional Vision Model Pruning with Latency Constraint</i>
+	  	<!-- IEEE International Conference on Robotics and Automation (ICRA) 2023. -->
+	      </div>
+	      <h3><a href="https://arxiv.org/abs/2504.02168">[abs]</a>&emsp;<a href="https://arxiv.org/pdf/2504.02168.pdf">[pdf]</a>&emsp;<a href="bib.txt">[bibtex]</a></h3>
+	      <!-- <h3><a href="https://arxiv.org/abs/2206.07959">[abs]</a>&emsp;<a href="https://arxiv.org/pdf/2206.07959.pdf">[pdf]</a></h3> -->
+	    </div>
+	    <div class="w3-col s0 m1 l2" style="height:10px"></div>
+
+	  </div>
+
+	  <hr>
+	  
+	  
+	  <!-- @article{sun2025mdp,
+		title={MDP: Multidimensional Vision Model Pruning with Latency Constraint},
+		author={Sun, Xinglong and Lakshmanan, Barath and Shen, Maying and Lan, Shiyi and Chen, Jingde and Alvarez, Jose M},
+		journal={arXiv preprint arXiv:2504.02168},
+		year={2025}
+	  } -->
+	  <div class="w3-row w3-margin" style="padding-bottom:2em">
+	    <!-- <h2><a href="bib.txt">[bibtex]</a></h3> -->
+	    <div class="w3-center"><h2>Bibtex</h2></div>
+	      <div class="w3-code notranslate">
+	  	@inproceedings{sun2025mdp,<br>
+	  	&emsp;author    = {Sun, Xinglong and Lakshmanan, Barath and Shen, Maying and Lan, Shiyi and Chen, Jingde and Alvarez, Jose M}, <br>
+	  	&emsp;title     = {MDP: Multidimensional Vision Model Pruning with Latency Constraint},<br>
+	  	&emsp;year      = {2025},<br>
+		&emsp;journal={arXiv preprint arXiv:2504.02168},<br>
+	  	}
+	      </div>
+	    
+	  </div>
+
+	  
+	  <!-- <hr> -->
+
+	  <!-- <div class="w3-center"><h2>Bibtex</h2></div> -->
+
+	  
+	  <!-- end paper container -->
+
+
+	</div><!-- End Grid -->
+      </div><!-- End Page Container -->
+
+  </body>
+</html>
